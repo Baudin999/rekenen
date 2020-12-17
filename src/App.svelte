@@ -32,6 +32,10 @@
 	let remaining = 100;
 
 	const start = () => {
+		goed = 0;
+		fout = 0;
+		level = 0;
+
 		settingsShown = false;
 		started = true;
 		setTimeout(() => {
@@ -293,17 +297,4 @@
 			<div><input type="checkbox" bind:checked={times} /> x</div>
 		</div>
 	{/if}
-
-	<!-- {#if started}
-		<div class="progress">
-			<ProgressBar
-				series={remaining}
-				valueLabel=" "
-				width="100%"
-				style="standard"
-				addBackground={true}
-				bgColor="black"
-				bgFillColor="orange" />
-		</div>
-	{/if} -->
 </main>
