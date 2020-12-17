@@ -32,6 +32,7 @@
 	let remaining = 100;
 
 	const start = () => {
+		settingsShown = false;
 		started = true;
 		setTimeout(() => {
 			if (!plus && !minus && !times) plus = true;
@@ -136,8 +137,9 @@
 		}
 	};
 
-	const showSettings = () => {
-		settingsShown = !settingsShown;
+	const showSettings = (p) => {
+		settingsShown = p;
+		console.log(settingsShown);
 	};
 
 	onMount(() => {
@@ -195,12 +197,12 @@
 	.incorrect input {
 		color: red;
 	}
-
 	.settings {
 		position: fixed;
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%, -50%);
+		z-index: 9999;
 
 		border: 1px solid gray;
 		border-radius: 5px;
@@ -261,7 +263,7 @@
 		<div class="incorrect">Fout: {fout}</div>
 		{#if !started}
 			<button on:click={start}>Start!</button>
-			<button on:click={showSettings}>Settings</button>
+			<button on:click={() => showSettings(true)}>Settings</button>
 		{:else}<button on:click={stop}>Stop!</button>{/if}
 	</div>
 
@@ -269,7 +271,7 @@
 
 	{#if settingsShown}
 		<div class="settings">
-			<button on:click={showSettings}>Close</button>
+			<button on:click={() => showSettings(false)}>Close</button>
 			<hr />
 			<div>Minimum: <input bind:value={min} /></div>
 			<div>Maximum: <input bind:value={max} /></div>
@@ -277,11 +279,11 @@
 
 			<div><input type="checkbox" bind:checked={plus} /> +</div>
 			<div><input type="checkbox" bind:checked={minus} /> -</div>
-			<div><input type="checkbox" bind:checked={times} /> *</div>
+			<div><input type="checkbox" bind:checked={times} /> x</div>
 		</div>
 	{/if}
 
-	{#if started}
+	<!-- {#if started}
 		<div class="progress">
 			<ProgressBar
 				series={remaining}
@@ -292,5 +294,5 @@
 				bgColor="black"
 				bgFillColor="orange" />
 		</div>
-	{/if}
+	{/if} -->
 </main>
