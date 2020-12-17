@@ -8,6 +8,7 @@
     "start": "sirv public"
   },
   "devDependencies": {
+    "@okrad/svelte-progressbar": "^1.9.4",
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "rollup": "^2.3.4",

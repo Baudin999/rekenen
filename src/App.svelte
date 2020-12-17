@@ -1,5 +1,7 @@
 <script>
 	import { onMount } from "svelte";
+	import ProgressBar from "@okrad/svelte-progressbar";
+
 	let settingsShown = false;
 	let min = 0;
 	let max = 10;
@@ -22,27 +24,43 @@
 
 	let goed = 0;
 	let fout = 0;
+	let level = 0;
 
 	let timeout;
 	let timeoutFactor = 5000;
+	let interval;
+	let remaining = 100;
 
 	const start = () => {
-		if (!plus && !minus && !times) plus = true;
-
-		signs = [];
-		if (plus) signs.push("+");
-		if (minus) signs.push("-");
-		if (times) signs.push("*");
-
-		generate();
-
+		started = true;
 		setTimeout(() => {
-			_input.select();
-		});
+			if (!plus && !minus && !times) plus = true;
+
+			signs = [];
+			if (plus) signs.push("+");
+			if (minus) signs.push("-");
+			if (times) signs.push("*");
+
+			generate();
+
+			setTimeout(() => {
+				_input.select();
+			});
+
+			runClock();
+		}, 500);
 	};
+
+	const runClock = () => {
+		interval = setInterval(() => {
+			remaining = remaining - 25;
+		}, timeoutFactor / 5);
+	};
+
 	const stop = () => {
 		started = false;
 		clearTimeout(timeout);
+		clearInterval(interval);
 	};
 
 	const generate = () => {
@@ -72,11 +90,14 @@
 			generate();
 		}
 	};
+
 	const submit = (e) => {
 		if (e.key == "Enter") {
+			clearInterval(interval);
 			disabled = true;
 
 			if (timeout) clearTimeout(timeout);
+			remaining = 100;
 
 			// reset status and exercise
 			setTimeout(() => {
@@ -93,6 +114,7 @@
 					_input.value = "";
 					setTimeout(() => {
 						_input.select();
+						runClock();
 					});
 				}
 			}, 2000);
@@ -110,6 +132,7 @@
 				message = "Jammer: " + result;
 				fout++;
 			}
+			level = Math.floor(goed / 5);
 		}
 	};
 
@@ -178,6 +201,23 @@
 		-webkit-box-shadow: 0px 0px 15px 10px rgba(0, 0, 0, 0.25);
 		-moz-box-shadow: 0px 0px 15px 10px rgba(0, 0, 0, 0.25);
 	}
+	.score {
+		position: fixed;
+		top: 5px;
+		left: 5px;
+	}
+	.level {
+		position: fixed;
+		top: 5px;
+		right: 5px;
+	}
+	.progress {
+		position: fixed;
+		bottom: 5px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 400px;
+	}
 
 	input[type="number"]::-webkit-inner-spin-button,
 	input[type="number"]::-webkit-outer-spin-button {
@@ -216,6 +256,8 @@
 		{:else}<button on:click={stop}>Stop!</button>{/if}
 	</div>
 
+	<div class="level">Level {level}</div>
+
 	{#if settingsShown}
 		<div class="settings">
 			<button on:click={showSettings}>Close</button>
@@ -227,6 +269,19 @@
 			<div><input type="checkbox" bind:checked={plus} /> +</div>
 			<div><input type="checkbox" bind:checked={minus} /> -</div>
 			<div><input type="checkbox" bind:checked={times} /> *</div>
+		</div>
+	{/if}
+
+	{#if started}
+		<div class="progress">
+			<ProgressBar
+				series={remaining}
+				valueLabel=" "
+				width="100%"
+				style="standard"
+				addBackground={true}
+				bgColor="black"
+				bgFillColor="orange" />
 		</div>
 	{/if}
 </main>
