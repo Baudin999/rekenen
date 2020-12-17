@@ -161,6 +161,17 @@
 		transform: translate(-50%, -50%);
 		font-size: 70px;
 	}
+	@media only screen and (max-device-width: 640px) {
+		.main {
+			font-size: 20px;
+		}
+	}
+
+	@media only screen and (max-device-width: 768px) {
+		.main {
+			font-size: 20px;
+		}
+	}
 	.main input {
 		font-size: 70px;
 		border: none;
