@@ -76,8 +76,8 @@
 			return;
 		}
 
-		let l = Math.floor(Math.random() * Math.floor(max));
-		let r = Math.floor(Math.random() * Math.floor(max));
+		let l = Math.floor(Math.random() * Math.floor(max)) + +min;
+		let r = Math.floor(Math.random() * Math.floor(max)) + +min;
 
 		if (sign === "+") result = l + r;
 		else if (sign === "-") result = l - r;
