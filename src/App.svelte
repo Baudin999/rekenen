@@ -42,6 +42,10 @@
 			if (minus) signs.push("-");
 			if (times) signs.push("*");
 
+			// set the sign
+			let signIndex = Math.floor(Math.random() * signs.length);
+			sign = signs[signIndex] || "+";
+
 			generate();
 
 			setTimeout(() => {
@@ -80,7 +84,14 @@
 		else if (sign === "*") result = l * r;
 		else result = l + r;
 
-		if (result < max && result > min) {
+		if (sign !== "*" && result < max && result > min) {
+			left = l;
+			right = r;
+
+			timeout = setTimeout(() => {
+				submit({ key: "Enter", target: { value: _input.value } });
+			}, timeoutFactor);
+		} else if (sign === "*") {
 			left = l;
 			right = r;
 
